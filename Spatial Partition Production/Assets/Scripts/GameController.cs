@@ -10,31 +10,19 @@ namespace SpatialPartitionPattern
     {
         public GameObject friendlyObj;
         public GameObject enemyObj;
-
-        // Change materials to detect which enemy is the closest
         public Material enemyMaterial;
-        public Material closestEnemyMaterial;
-
-        // To get a cleaner workspace, parent all soldiers to these empty gameobjects
-        public Transform enemyParent;
+        public Material closestEnemyMaterial; // Change materials to detect which enemy is the closest
+        public Transform enemyParent; // To get a cleaner workspace, parent all soldiers to these empty gameobjects
         public Transform friendlyParent;
-
-        // Store all soldiers in these lists
-        List<Soldier> enemySoldiers = new List<Soldier>();
+        List<Soldier> enemySoldiers = new List<Soldier>(); // Store all soldiers in these lists
         List<Soldier> friendlySoldiers = new List<Soldier>();
+        List<Soldier> closestEnemies = new List<Soldier>(); // Save the closest enemies to easier change back its material
 
-        // Save the closest enemies to easier change back its material
-        List<Soldier> closestEnemies = new List<Soldier>();
+        private float mapWidth = 50f; // Grid data
+        private int cellSize = 10;
+        private int numberOfSoldiers = 100; // Number of soldiers on each team
 
-        // Grid data
-        float mapWidth = 50f;
-        int cellSize = 10;
-
-        // Number of soldiers on each team
-        int numberOfSoldiers = 100;
-
-        // The Spatial Partition Grid
-        Grid grid;
+        Grid grid; // The Spatial Partition Grid
 
         // Timer elements
         [SerializeField] TextMeshProUGUI timerText;
