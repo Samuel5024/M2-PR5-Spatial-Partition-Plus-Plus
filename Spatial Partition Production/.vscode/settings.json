@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Spatial Partition.sln"
+    "dotnet.defaultSolution": "Spatial Partition Production.sln"
 }
