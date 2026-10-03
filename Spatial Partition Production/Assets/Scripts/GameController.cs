@@ -26,7 +26,7 @@ namespace SpatialPartitionPattern
         private float elapsedTime;
 
         [SerializeField] private Toggle partitionToggle; // Partition Toggle
-        private bool isPartitionOn;
+        private bool isPartitionOn = true;
 
         Grid grid; // The Spatial Partition Grid
 
@@ -50,29 +50,29 @@ namespace SpatialPartitionPattern
 
         void Update()
         {
-            for(int i = 0; i < enemySoldiers.Count; i++)
+            for(int i = 0; i < enemySoldiers.Count; i++) // Move the enemies 
             {
                 enemySoldiers[i].Move();
             }
 
-            for(int i = 0; i < closestEnemies.Count; i++)
+            for(int i = 0; i < closestEnemies.Count; i++) // Reset material of the closest enemies
             {
                 closestEnemies[i].soldierMeshRenderer.material = enemyMaterial;
             }
 
-            closestEnemies.Clear();
+            closestEnemies.Clear(); // Reset the list with closest enemies
 
             for(int i = 0; i < friendlySoldiers.Count; i++)
             {
                 if(isPartitionOn)
                 {
-                    Soldier closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]);
+                    Soldier closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); // Fast verision with spatial partition
 
-                    if(closestEnemy != null)
+                    if(closestEnemy != null) // If we found an enemy
                     {
-                        closestEnemy.soldierMeshRenderer.material = closestEnemyMaterial;
+                        closestEnemy.soldierMeshRenderer.material = closestEnemyMaterial; // Change material
                         closestEnemies.Add(closestEnemy);
-                        friendlySoldiers[i].Move(closestEnemy);
+                        friendlySoldiers[i].Move(closestEnemy); // Move the fiendly in the direction of the enemy
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace SpatialPartitionPattern
             isPartitionOn = !isPartitionOn;
         }
 
-        Soldier FindClosestEnemySlow(Soldier soldier)
+        Soldier FindClosestEnemySlow(Soldier soldier) // Find the closest enemy - slow version
         {
             Soldier closestEnemy = null;
             float bestDistSqr = Mathf.Infinity;
