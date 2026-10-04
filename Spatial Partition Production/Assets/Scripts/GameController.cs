@@ -11,6 +11,8 @@ namespace SpatialPartitionPattern
         public GameObject friendlyObj;
         public GameObject enemyObj;
         public Material enemyMaterial;
+        public int totalEnemies;
+        public int totalFriendlies;
         public Material closestEnemyMaterial; // Change materials to detect which enemy is the closest
         public Transform enemyParent; // To get a cleaner workspace, parent all soldiers to these empty gameobjects
         public Transform friendlyParent;
@@ -44,53 +46,70 @@ namespace SpatialPartitionPattern
                 GameObject newFriendly = Instantiate(friendlyObj, randomPos, Quaternion.identity) as GameObject; // Create a new friendly
                 friendlySoldiers.Add(new Friendly(newFriendly, mapWidth)); // Add the friendly to a list
                 newFriendly.transform.parent = friendlyParent;// Parent it
+
+                totalEnemies = enemySoldiers.Count;
+                totalFriendlies = friendlySoldiers.Count;
+                
             }
         }
 
         void Update()
         {
-            for(int i = 0; i < enemySoldiers.Count; i++) // Move the enemies 
+            enemySoldiers.RemoveAll(enemy => enemy == null || enemy.soldierTrans == null); // Remove destroyed soldiers first
+            friendlySoldiers.RemoveAll(friendly => friendly == null || friendly.soldierTrans == null);
+            
+            for(int i = 0; i < enemySoldiers.Count; i++) // Move the enemies
             {
-                enemySoldiers[i].Move();
+                if (enemySoldiers[i] != null && enemySoldiers[i].soldierTrans != null)
+                {
+                    enemySoldiers[i].Move();
+                }
             }
 
             for(int i = 0; i < closestEnemies.Count; i++) // Reset material of the closest enemies
             {
-                closestEnemies[i].soldierMeshRenderer.material = enemyMaterial;
+                if (closestEnemies[i] != null && closestEnemies[i].soldierMeshRenderer != null) // Check if the enemy still exists before resetting material
+                {
+                    closestEnemies[i].soldierMeshRenderer.material = enemyMaterial;
+                }
             }
+            closestEnemies.Clear(); 
 
-            closestEnemies.Clear(); // Reset the list with closest enemies
-
-            for(int i = 0; i < friendlySoldiers.Count; i++)
+            for(int i = 0; i < friendlySoldiers.Count; i++) // Move the friendlies
             {
+                if (friendlySoldiers[i] == null || friendlySoldiers[i].soldierTrans == null)
+                {
+                    continue;
+                }
+
                 Soldier closestEnemy = null;
-                
+
                 if(partitionToggle.isOn)
                 {
-                    closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); // Fast verision with spatial partition
-
-                    if(closestEnemy != null) // If we found an enemy
-                    {
-                        closestEnemy.soldierMeshRenderer.material = closestEnemyMaterial; // Change material
-                        closestEnemies.Add(closestEnemy);
-                        friendlySoldiers[i].Move(closestEnemy); // Move the fiendly in the direction of the enemy
-                    }
+                    closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); 
                 }
                 else
                 {
                     closestEnemy = FindClosestEnemySlow(friendlySoldiers[i]);
+                }
 
-                    if(closestEnemy != null)
+                if(closestEnemy != null && closestEnemy.soldierTrans != null) // Only move and change materials if a valid enemy was found
+                {
+                    if (closestEnemy.soldierMeshRenderer != null)
                     {
-                        friendlySoldiers[i].Move(closestEnemy);
+                        closestEnemy.soldierMeshRenderer.material = closestEnemyMaterial;
                     }
+                    closestEnemies.Add(closestEnemy);
+                    friendlySoldiers[i].Move(closestEnemy); 
                 }
             }
 
             elapsedTime += Time.deltaTime;
             int minutes = Mathf.FloorToInt(elapsedTime / 60);
             int seconds = Mathf.FloorToInt(elapsedTime % 60);
-            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds); // Format time to read as 01:01 instead of a long decimal
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds); 
+
+            Debug.Log("enemies left: " + totalEnemies);
         }
 
         Soldier FindClosestEnemySlow(Soldier soldier) // Find the closest enemy - slow version
@@ -100,6 +119,11 @@ namespace SpatialPartitionPattern
 
             for (int i = 0; i < enemySoldiers.Count; i++) // Loop through all enemies
             {
+                if(enemySoldiers[i] == null || enemySoldiers[i].soldierTrans == null) // Check for any destroyed enemies or transforms
+                {
+                    continue;
+                }
+                
                 float distSqr = (soldier.soldierTrans.position - enemySoldiers[i].soldierTrans.position).sqrMagnitude; // The distance sqr between the soldier and this enemy
 
                 if (distSqr < bestDistSqr) // If the distance is better than the previous best distance, then we have found an enemy that's closer

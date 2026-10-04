@@ -44,6 +44,12 @@ namespace SpatialPartitionPattern
 
             while(enemy != null) // Loop through the linked list
             {
+                if(enemy == null || enemy.soldierTrans == null)
+                {
+                    enemy = enemy.nextSoldier;
+                    continue;
+                }
+
                 float distSqr = (enemy.soldierTrans.position - friendlySoldier.soldierTrans.position).sqrMagnitude; // The distance sqr between the soldier and this enemy
 
                 if(distSqr < bestDistSqr) // If this distance is better than the previous best distance then we have found an enemy that's closer
