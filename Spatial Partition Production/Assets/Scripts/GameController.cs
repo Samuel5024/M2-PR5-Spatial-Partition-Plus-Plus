@@ -63,9 +63,11 @@ namespace SpatialPartitionPattern
 
             for(int i = 0; i < friendlySoldiers.Count; i++)
             {
+                Soldier closestEnemy = null;
+                
                 if(partitionToggle.isOn)
                 {
-                    Soldier closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); // Fast verision with spatial partition
+                    closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); // Fast verision with spatial partition
 
                     if(closestEnemy != null) // If we found an enemy
                     {
@@ -76,7 +78,12 @@ namespace SpatialPartitionPattern
                 }
                 else
                 {
-                    FindClosestEnemySlow(friendlySoldiers[i]);
+                    closestEnemy = FindClosestEnemySlow(friendlySoldiers[i]);
+
+                    if(closestEnemy != null)
+                    {
+                        friendlySoldiers[i].Move(closestEnemy);
+                    }
                 }
             }
 
