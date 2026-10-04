@@ -26,7 +26,6 @@ namespace SpatialPartitionPattern
         private float elapsedTime;
 
         [SerializeField] private Toggle partitionToggle; // Partition Toggle
-        private bool isPartitionOn = true;
 
         Grid grid; // The Spatial Partition Grid
 
@@ -64,7 +63,7 @@ namespace SpatialPartitionPattern
 
             for(int i = 0; i < friendlySoldiers.Count; i++)
             {
-                if(isPartitionOn)
+                if(partitionToggle.isOn)
                 {
                     Soldier closestEnemy = grid.FindClosestEnemy(friendlySoldiers[i]); // Fast verision with spatial partition
 
@@ -75,17 +74,16 @@ namespace SpatialPartitionPattern
                         friendlySoldiers[i].Move(closestEnemy); // Move the fiendly in the direction of the enemy
                     }
                 }
+                else
+                {
+                    FindClosestEnemySlow(friendlySoldiers[i]);
+                }
             }
 
             elapsedTime += Time.deltaTime;
             int minutes = Mathf.FloorToInt(elapsedTime / 60);
             int seconds = Mathf.FloorToInt(elapsedTime % 60);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds); // Format time to read as 01:01 instead of a long decimal
-        }
-
-        public void TogglePartition()
-        {
-            isPartitionOn = !isPartitionOn;
         }
 
         Soldier FindClosestEnemySlow(Soldier soldier) // Find the closest enemy - slow version

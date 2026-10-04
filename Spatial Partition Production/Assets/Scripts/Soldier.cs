@@ -3,28 +3,21 @@ using System.Collections;
 
 namespace SpatialPartitionPattern
 {
-    // The soldier base class for enemies and friendly
-    public class Soldier
+    public class Soldier // The soldier base class for enemies and friendly
     {
-        // To change material
-        public MeshRenderer soldierMeshRenderer;
-        // To move the soldier
-        public Transform soldierTrans;
-        // The speed the soldier is walking with
-        protected float walkSpeed;
-        // Has to do with the grid, so we can avoid storing all soldiers in an arry
-        // Instead we are going to use a linked list where all soliders in the cell are linked to each other
+        public MeshRenderer soldierMeshRenderer; // To change material
+        public Transform soldierTrans; // To move the soldier
+        protected float walkSpeed; // The speed the soldier is walking with Has to do with the grid, so we can avoid storing all soldiers in an arry
+                                   // Instead we are going to use a linked list where all soliders in the cell are linked to each other
         public Soldier previousSoldier;
         public Soldier nextSoldier;
 
-        // The enemy doesn't need any outside information
-        public virtual void Move()
+        public virtual void Move() // The enemy doesn't need any outside information
         {
 
         }
 
-        // The friendly has to move which soldier is the closest
-        public virtual void Move(Soldier soldier)
+        public virtual void Move(Soldier soldier) // The friendly has to move which soldier is the closest
         {
 
         }

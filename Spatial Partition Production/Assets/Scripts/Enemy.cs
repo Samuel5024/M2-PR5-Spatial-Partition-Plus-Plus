@@ -3,20 +3,14 @@ using System.Collections;
 
 namespace SpatialPartitionPattern
 {
-    // The enemy cube being chased by the spheres
-    public class Enemy : Soldier
+    public class Enemy : Soldier // The enemy cube being chased by the spheres
     {
-        // The position the soldier is heading for when moving
-        Vector3 currentTarget;
-        // The position the soldier had before it moved, so we can see if it should change cell
-        Vector3 oldPos;
-        // The width of the map to generate random coordinates within the map
-        float mapWidth;
-        // The grid
-        Grid grid;
+        Vector3 currentTarget; // The position the soldier is heading for when moving
+        Vector3 oldPos; // The position the soldier had before it moved, so we can see if it should change cell
+        float mapWidth; // The width of the map to generate random coordinates within the map
+        Grid grid; // The grid
 
-        //Init enemy
-        public Enemy(GameObject soldierObj, float mapWidth, Grid grid)
+        public Enemy(GameObject soldierObj, float mapWidth, Grid grid) //Init enemy
         {
             // Save what we need to save
             this.soldierTrans = soldierObj.transform;
@@ -24,44 +18,34 @@ namespace SpatialPartitionPattern
             this.mapWidth = mapWidth;
             this.grid = grid;
 
-            // Add this unit to the grid
-            grid.Add(this);
+            grid.Add(this); // Add this unit to the grid
 
-            // Init the old pos
-            oldPos = soldierTrans.position;
+            oldPos = soldierTrans.position; // Init the old pos
             this.walkSpeed = 5f;
 
-            // Give it a random coordinate to move towards
-            GetNewTarget(); 
+            GetNewTarget(); // Give it a random coordinate to move towards
         }
 
-        // Move the cube randomly across the map
-        public override void Move()
+        public override void Move() // Move the cube randomly across the map
         {
             oldPos = soldierTrans.position;
-            // Move towards the target
-            soldierTrans.Translate(Vector3.forward * Time.deltaTime * walkSpeed);
-
-            // See if the cube has moved to another cell
-            grid.Move(this, oldPos);
+            soldierTrans.Translate(Vector3.forward * Time.deltaTime * walkSpeed); // Move towards the target
+            
+            grid.Move(this, oldPos); // See if the cube has moved to another cell
 
             // Save the old position
             oldPos = soldierTrans.position;
 
-            // If the soldier has reached the target, find a new target
-            if((soldierTrans.position - currentTarget).magnitude < 1f)
+            if((soldierTrans.position - currentTarget).magnitude < 1f) // If the soldier has reached the target, find a new target
             {
                 GetNewTarget();
             }
         }
 
-        // Give the enemy a new target to move towards and rotate towards that target
-        void GetNewTarget()
+        void GetNewTarget() // Give the enemy a new target to move towards and rotate towards that target
         {
             currentTarget = new Vector3(Random.Range(0f, mapWidth), 0.5f, Random.Range(0f, mapWidth));
-
-            // Rotate towards the target
-            soldierTrans.rotation = Quaternion.LookRotation(currentTarget - soldierTrans.position);
+            soldierTrans.rotation = Quaternion.LookRotation(currentTarget - soldierTrans.position); // Rotate towards the target
         }
     }
 }
