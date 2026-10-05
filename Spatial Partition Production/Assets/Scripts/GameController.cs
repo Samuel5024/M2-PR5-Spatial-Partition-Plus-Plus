@@ -25,6 +25,8 @@ namespace SpatialPartitionPattern
         private int numberOfSoldiers = 100; // Number of soldiers on each team
 
         [SerializeField] TextMeshProUGUI timerText; // Timer elements
+        public TextMeshProUGUI enemiesRemainingText;
+        // [SerialzieField] TextMeshProUGUI friendliesRemainingText;
         private float elapsedTime;
 
         [SerializeField] private Toggle partitionToggle; // Partition Toggle
@@ -46,10 +48,6 @@ namespace SpatialPartitionPattern
                 GameObject newFriendly = Instantiate(friendlyObj, randomPos, Quaternion.identity) as GameObject; // Create a new friendly
                 friendlySoldiers.Add(new Friendly(newFriendly, mapWidth)); // Add the friendly to a list
                 newFriendly.transform.parent = friendlyParent;// Parent it
-
-                totalEnemies = enemySoldiers.Count;
-                totalFriendlies = friendlySoldiers.Count;
-                
             }
         }
 
@@ -57,6 +55,9 @@ namespace SpatialPartitionPattern
         {
             enemySoldiers.RemoveAll(enemy => enemy == null || enemy.soldierTrans == null); // Remove destroyed soldiers first
             friendlySoldiers.RemoveAll(friendly => friendly == null || friendly.soldierTrans == null);
+            
+            totalEnemies = enemySoldiers.Count;
+            totalFriendlies = friendlySoldiers.Count;
             
             for(int i = 0; i < enemySoldiers.Count; i++) // Move the enemies
             {
@@ -108,6 +109,8 @@ namespace SpatialPartitionPattern
             int minutes = Mathf.FloorToInt(elapsedTime / 60);
             int seconds = Mathf.FloorToInt(elapsedTime % 60);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds); 
+
+            enemiesRemainingText.text = string.Format($"{totalEnemies}"); 
 
             Debug.Log("enemies left: " + totalEnemies);
         }
