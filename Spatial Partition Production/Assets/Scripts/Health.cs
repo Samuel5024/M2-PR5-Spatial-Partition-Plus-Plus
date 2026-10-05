@@ -2,26 +2,17 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public int health;
-    public int maxHealth = 15;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        health = maxHealth;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int enemyHealth;
+    public int friendliesHealth;
+    public int enemyMaxHealth = 15;
+    public int friendliesMaxHealth = 25;
 
     public void TakeDamage(int amount)
     {
-        health -= amount;
+        enemyHealth -= amount;
+        friendliesHealth -= amount;
 
-        if(health <= 0)
+        if(enemyHealth <= 0 || friendliesMaxHealth <= 0)
         {
             Destroy(gameObject);
         }
