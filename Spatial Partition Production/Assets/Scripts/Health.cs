@@ -4,8 +4,8 @@ public class Health : MonoBehaviour
 {
     public int enemyHealth;
     public int friendliesHealth;
-    public int enemyMaxHealth = 15;
-    public int friendliesMaxHealth = 25;
+    public int enemyMaxHealth = 50;
+    public int friendliesMaxHealth = 100;
 
     public void TakeDamage(int amount)
     {

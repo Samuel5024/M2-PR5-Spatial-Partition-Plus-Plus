@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SpatialPartitionPattern
 {
@@ -23,6 +24,7 @@ namespace SpatialPartitionPattern
         private float mapWidth = 50f; // Grid data
         private int cellSize = 10;
         private int numberOfSoldiers = 100; // Number of soldiers on each team
+        private bool isRestarting = false;
 
         [SerializeField] TextMeshProUGUI timerText; // Timer elements
         public TextMeshProUGUI enemiesRemainingText;
@@ -32,6 +34,7 @@ namespace SpatialPartitionPattern
         [SerializeField] private Toggle partitionToggle; // Partition Toggle
 
         Grid grid; // The Spatial Partition Grid
+
 
         void Start()
         {
@@ -112,6 +115,12 @@ namespace SpatialPartitionPattern
 
             enemiesRemainingText.text = string.Format($"{totalEnemies}");
             friendliesRemainingText.text = string.Format($"{totalFriendlies}");
+
+            if (totalEnemies == 0 || totalFriendlies == 0)
+            {
+                isRestarting = true;
+                StartCoroutine(Restart());
+            }
         }
 
         Soldier FindClosestEnemySlow(Soldier soldier) // Find the closest enemy - slow version
@@ -135,6 +144,12 @@ namespace SpatialPartitionPattern
                 }
             }
             return closestEnemy;
+        }
+
+        public IEnumerator Restart()
+        {
+            yield return new WaitForSeconds(2.5f);
+            SceneManager.LoadScene("SpatialPartition");
         }
     }
 }

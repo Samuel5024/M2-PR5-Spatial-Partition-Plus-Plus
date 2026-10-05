@@ -3,7 +3,7 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     public int enemyDamage = 1;
-    public int soldierDamage = 1;
+    public int soldierDamage = 2;
     private Health health;
 
     private void OnTriggerEnter(Collider other)
