@@ -2,29 +2,23 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
-    public int damage = 1;
+    public int enemyDamage = 1;
+    public int soldierDamage = 1;
     private Health health;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Friendly" || other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Friendly" && health != null)
         {
-            if(health == null)
-            {
-                health = other.gameObject.gameObject.GetComponent<Health>();
-            }
-            health.TakeDamage(damage);
+            health.TakeDamage(enemyDamage);
+        }
+        if (other.gameObject.tag == "Enemy" && health != null)
+        {
+            health.TakeDamage(soldierDamage);
+        }
+        else
+        {
+            health = other.gameObject.gameObject.GetComponent<Health>();
         }
     }
 }

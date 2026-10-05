@@ -26,7 +26,7 @@ namespace SpatialPartitionPattern
 
         [SerializeField] TextMeshProUGUI timerText; // Timer elements
         public TextMeshProUGUI enemiesRemainingText;
-        // [SerialzieField] TextMeshProUGUI friendliesRemainingText;
+        public TextMeshProUGUI friendliesRemainingText;
         private float elapsedTime;
 
         [SerializeField] private Toggle partitionToggle; // Partition Toggle
@@ -110,9 +110,8 @@ namespace SpatialPartitionPattern
             int seconds = Mathf.FloorToInt(elapsedTime % 60);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds); 
 
-            enemiesRemainingText.text = string.Format($"{totalEnemies}"); 
-
-            Debug.Log("enemies left: " + totalEnemies);
+            enemiesRemainingText.text = string.Format($"{totalEnemies}");
+            friendliesRemainingText.text = string.Format($"{totalFriendlies}");
         }
 
         Soldier FindClosestEnemySlow(Soldier soldier) // Find the closest enemy - slow version
